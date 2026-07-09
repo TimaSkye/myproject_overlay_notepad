@@ -1,0 +1,119 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "overlay-notepad"
+version = "0.1.0"
+description = "Overlay widget that shows key-value pairs from file.txt"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "PySide6>=6.7.0",
+]
+
+[project.scripts]
+overlay-notepad = "overlay_notepad.app:main"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.9.0",
+    "celery-types>=0.26.0",
+    "pyinstaller>=6.11.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+exclude = [
+    ".git",
+    ".idea",
+    ".venv",
+    "build",
+    "dist",
+    "config",
+    "data",
+    "**/__pycache__",
+    "*.egg-info",
+]
+
+[tool.ruff.lint]
+select = [
+    "F",
+    "E",
+    "W",
+    "E402",
+    "B",
+    "I",
+    "D",
+    "Q",
+    "C4",
+    "RET",
+    "ERA",
+    "SIM",
+    "UP",
+    "G",
+    "PTH",
+    "RUF",
+    "ASYNC",
+    "A",
+    "C90",
+]
+ignore = [
+    "B023",
+    "B904",
+    "C901",
+    "D100",
+    "D101",
+    "D102",
+    "D104",
+    "D106",
+    "D203",
+    "D212",
+    "D400",
+    "D401",
+    "D415",
+    "E501",
+    "G004",
+    "Q000",
+    "Q003",
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "RUF010",
+    "RUF012",
+    "RUF032",
+    "RUF100",
+    "SIM105",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 20
+
+[tool.ruff.lint.flake8-builtins]
+builtins-ignorelist = ["id"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+force-sort-within-sections = true
+force-wrap-aliases = true
+order-by-type = false
+lines-after-imports = 2
+split-on-trailing-comma = false
+
+[tool.ruff.format]
+quote-style = "single"
+skip-magic-trailing-comma = true
+docstring-code-format = true

@@ -1,0 +1,25 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Published binaries (храним только готовый релиз в корне)
+!OverlayNotepad.exe
+
+# IDE and tooling
+.idea/
+.vscode/
+.ruff_cache/
+.pytest_cache/
+
+# System files
+.DS_Store
+Thumbs.db
