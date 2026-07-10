@@ -1,11 +1,17 @@
-# -*- mode: python ; coding: utf-8 -*-
+# -*- mode: python ; coding: utf-8
 
 
 a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('src\\\\icon.ico', '.'), ('src\\\\notepad.png', '.'), ('src\\\\qr.jfif', '.')],
+    datas=[
+        ('src\\icon.ico', '.'),
+        ('src\\notepad.png', '.'),
+        ('src\\qr.jfif', '.'),
+        ('src\\github.png', '.'),
+        ('src\\telegram.png', '.'),
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
