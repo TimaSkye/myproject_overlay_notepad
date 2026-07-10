@@ -116,6 +116,12 @@ class OverlayWidget(QtWidgets.QWidget):
         self.layout.setSpacing(0)
 
         self.label_widgets: list[QtWidgets.QLabel] = []
+        self.filter_label = QtWidgets.QLabel(self)
+        self.filter_label.setStyleSheet(
+            "color: rgba(255,255,255,180); background-color: rgba(0,0,0,100); "
+            "padding: 2px 6px; border-radius: 3px; font-size: 9pt;"
+        )
+        self.filter_label.hide()
         self._ensure_row_count(2)
 
         self._context_menu = self._build_context_menu()
@@ -169,6 +175,7 @@ class OverlayWidget(QtWidgets.QWidget):
     def enterEvent(self, event: QtCore.QEvent) -> None:  # noqa: N802 (Qt naming)
         self.search_active = True
         self.setFocus()
+        self._update_filter_label()
         super().enterEvent(event)
 
     def leaveEvent(self, event: QtCore.QEvent) -> None:  # noqa: N802
@@ -176,6 +183,7 @@ class OverlayWidget(QtWidgets.QWidget):
         self.search_buffer = ""
         self.state.filter_text = ""
         self._apply_state()
+        self.filter_label.hide()
         super().leaveEvent(event)
 
     def wheelEvent(self, event: QtGui.QWheelEvent) -> None:  # noqa: N802
@@ -265,6 +273,7 @@ class OverlayWidget(QtWidgets.QWidget):
     def resizeEvent(self, event: QtGui.QResizeEvent) -> None:  # noqa: N802
         super().resizeEvent(event)
         self._update_visible_rows()
+        self._update_filter_label_position()
 
     def reload_entries(self) -> None:
         self.store.load()
@@ -340,6 +349,7 @@ class OverlayWidget(QtWidgets.QWidget):
         self.state.filter_text = self.search_buffer
         self.state.offset = 0
         self._apply_state()
+        self._update_filter_label()
 
     def _enable_move_mode(self) -> None:
         self.move_mode = True
@@ -515,3 +525,21 @@ class OverlayWidget(QtWidgets.QWidget):
         color = QtGui.QColor(self.background_color)
         color.setAlpha(self.background_opacity)
         return color.name(QtGui.QColor.NameFormat.HexArgb)
+
+    def _update_filter_label(self) -> None:
+        if self.search_buffer:
+            self.filter_label.setText(f"🔍 {self.search_buffer}")
+            self.filter_label.show()
+            self._update_filter_label_position()
+        else:
+            self.filter_label.hide()
+
+    def _update_filter_label_position(self) -> None:
+        if not self.search_buffer:
+            return
+        self.filter_label.adjustSize()
+        label_width = self.filter_label.width()
+        label_height = self.filter_label.height()
+        x = self.width() - label_width - 4
+        y = 4
+        self.filter_label.move(x, y)
