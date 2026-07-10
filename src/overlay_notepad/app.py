@@ -261,15 +261,34 @@ def run_app(file_path: Path, config_path: Path, force_setup: bool, cli_override:
     return app.exec()
 
 
+def _default_base_dir() -> Path:
+    """Определяет директорию, в которой по умолчанию лежат file.txt и settings.json."""
+    try:
+        entry = Path(sys.argv[0]).resolve()
+    except OSError:
+        entry = Path()
+    if entry.exists():
+        return entry.parent if entry.is_file() else entry
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).resolve().parent
+    return Path.cwd()
+
+
 def parse_args() -> argparse.Namespace:
     """Парсит аргументы командной строки."""
+    base_dir = _default_base_dir()
     parser = argparse.ArgumentParser(description="Overlay Notepad — оверлей с парами ключ-значение")
-    parser.add_argument("--file", type=Path, default=None, help="Путь к источнику данных")
+    parser.add_argument(
+        "--file",
+        type=Path,
+        default=base_dir / "file.txt",
+        help="Путь к источнику данных (по умолчанию file.txt рядом с исполняемым файлом)",
+    )
     parser.add_argument(
         "--config-file",
         type=Path,
-        default=Path("settings.json"),
-        help="Путь к JSON с настройками",
+        default=base_dir / "settings.json",
+        help="Путь к JSON с настройками (по умолчанию settings.json рядом с исполняемым файлом)",
     )
     parser.add_argument(
         "--setup",
